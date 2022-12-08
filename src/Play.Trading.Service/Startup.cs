@@ -126,6 +126,7 @@ namespace Play.Trading.Service
              */
             EndpointConvention.Map<GrantItems>(new Uri(queueSettings.GrantItemsQueueAddress));
             EndpointConvention.Map<DebitGil>(new Uri(queueSettings.DebitGilQueueAddress));
+            EndpointConvention.Map<SubtracItems>(new Uri(queueSettings.SubtractItemsQueueAddress));
 
             services
                 .AddMassTransitHostedService();

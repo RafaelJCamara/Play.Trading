@@ -1,4 +1,5 @@
 ﻿using Automatonymous;
+using MassTransit;
 using Play.Identity.Contracts;
 using Play.Inventory.Contracts;
 using Play.Trading.Service.Activities;
@@ -19,6 +20,12 @@ namespace Play.Trading.Service.StateMachines
         public Event<InventoryItemsGranted> InventoryItemsGranted { get; }
         public Event<GilDebited> GilDebited { get; }
 
+        /*
+            The below attributes correspond to faults/exceptions that might occur when performing actions from the Saga (ex. funds not sufficient to buy)
+         */
+        public Event<Fault<GrantItems>> GrantItemsFaulted { get; }
+        public Event<Fault<DebitGil>> DebitGilFaulted { get; }
+        
 
         public PurchaseStateMachine()
         {
@@ -30,6 +37,7 @@ namespace Play.Trading.Service.StateMachines
             ConfigureAny();
             ConfigureAccepted();
             ConfigureItemsGranted();
+            ConfigureFaulted();
         }
 
         //Configure all the events
@@ -39,6 +47,16 @@ namespace Play.Trading.Service.StateMachines
             Event(() => GetPurchaseState);
             Event(() => InventoryItemsGranted);
             Event(() => GilDebited);
+            /*
+                We need to explicitly define the correlation ID, because MassTransit cannot infer it automatically
+                This inferrence occurs naturally in the remaining cases (as we saw previously)
+             */
+            Event(() => GrantItemsFaulted, x => x.CorrelateById(
+                    context => context.Message.Message.CorrelationId
+                ));
+            Event(() => DebitGilFaulted, x => x.CorrelateById(
+                    context => context.Message.Message.CorrelationId
+                ));
         }
 
         //this is refering to what happens when the initial 
@@ -90,7 +108,17 @@ namespace Play.Trading.Service.StateMachines
                         context.Instance.PurchaseTotal.Value,
                         context.Instance.CorrelationId
                     ))
-                    .TransitionTo(ItemsGranted)
+                    .TransitionTo(ItemsGranted),
+                /*
+                    This is where we deal with errors that might happen during the granting of items
+                 */
+                When(GrantItemsFaulted)
+                    .Then(context =>
+                    {
+                        context.Instance.ErrorMessage = context.Data.Exceptions[0].Message;
+                        context.Instance.LastUpdated = DateTimeOffset.UtcNow;
+                    })
+                    .TransitionTo(Faulted)
             );
         }
 
@@ -102,7 +130,20 @@ namespace Play.Trading.Service.StateMachines
                     {
                         context.Instance.LastUpdated = DateTimeOffset.UtcNow;
                     })
-                    .TransitionTo(Completed)
+                    .TransitionTo(Completed),
+                When(DebitGilFaulted)
+                    .Send(context => new SubtracItems(
+                            context.Instance.UserId,
+                            context.Instance.ItemId,
+                            context.Instance.Quantity,
+                            context.Instance.CorrelationId
+                        ))
+                    .Then(context =>
+                    {
+                        context.Instance.ErrorMessage = context.Data.Exceptions[0].Message;
+                        context.Instance.LastUpdated = DateTimeOffset.UtcNow;
+                    })
+                    .TransitionTo(Faulted)
             );
         }
 
@@ -111,6 +152,19 @@ namespace Play.Trading.Service.StateMachines
             DuringAny(
                 When(GetPurchaseState)
                 .Respond(x => x.Instance)
+            );
+        }
+
+        /*
+            What we have here is defining that, whenever our State Machine is Faulted, we don't want to receive any more requests to change it's state
+            The only request that is acceptable is the request that queries the state machine's state
+         */
+        private void ConfigureFaulted()
+        {
+            During(Faulted,
+                Ignore(PurchaseRequested),
+                Ignore(InventoryItemsGranted),
+                Ignore(GilDebited)
             );
         }
 
