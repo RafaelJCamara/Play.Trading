@@ -527,6 +527,15 @@
           "lib/netstandard2.0/Newtonsoft.Json.Bson.dll": {}
         }
       },
+      "Play.Catalog.Contracts/1.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Play.Catalog.Contracts.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Play.Catalog.Contracts.dll": {}
+        }
+      },
       "Play.Common/1.0.5": {
         "type": "package",
         "dependencies": {
@@ -543,6 +552,24 @@
         },
         "runtime": {
           "lib/net5.0/Play.Common.dll": {}
+        }
+      },
+      "Play.Identity.Contracts/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Play.Identity.Contracts.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Play.Identity.Contracts.dll": {}
+        }
+      },
+      "Play.Inventory.Contracts/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Play.Inventory.Contracts.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Play.Inventory.Contracts.dll": {}
         }
       },
       "RabbitMQ.Client/6.2.2": {
@@ -1815,6 +1842,17 @@
         "newtonsoft.json.bson.nuspec"
       ]
     },
+    "Play.Catalog.Contracts/1.0.1": {
+      "sha512": "EtaH4BtznG3lw52VOb+sOw57WkWeZa6y6AKRkltye2IZL2o08Pdl2hnjPPnVz5GN6AKWZPiNJOyMcbQUVuRRbA==",
+      "type": "package",
+      "path": "play.catalog.contracts/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net5.0/Play.Catalog.Contracts.dll",
+        "play.catalog.contracts.1.0.1.nupkg.sha512",
+        "play.catalog.contracts.nuspec"
+      ]
+    },
     "Play.Common/1.0.5": {
       "sha512": "knmurcon+j3TRvcapwYC9ZcvV2vnLsRHm9HySL+Lersx93v+1rHSWXthbsKlGGoJKQbQlOAixgV0MeWd/4HQQA==",
       "type": "package",
@@ -1824,6 +1862,28 @@
         "lib/net5.0/Play.Common.dll",
         "play.common.1.0.5.nupkg.sha512",
         "play.common.nuspec"
+      ]
+    },
+    "Play.Identity.Contracts/1.0.0": {
+      "sha512": "RtioQALxlExvD43RPM9uazUrVd2XFXfKsaUHgEl4kdqJUqCOWkvEFCthp8pyO7utQWw8LLqUxqJmSYb7qXqpJw==",
+      "type": "package",
+      "path": "play.identity.contracts/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net5.0/Play.Identity.Contracts.dll",
+        "play.identity.contracts.1.0.0.nupkg.sha512",
+        "play.identity.contracts.nuspec"
+      ]
+    },
+    "Play.Inventory.Contracts/1.0.0": {
+      "sha512": "Ax3tC4Una2aW+fg/8PdEqfUyJJlZsK6hBXVLR2RVbtPChoxJWwUI5D7bojLZmtrkcYx4oa5M3+nUlZwrZRFJVg==",
+      "type": "package",
+      "path": "play.inventory.contracts/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net5.0/Play.Inventory.Contracts.dll",
+        "play.inventory.contracts.1.0.0.nupkg.sha512",
+        "play.inventory.contracts.nuspec"
       ]
     },
     "RabbitMQ.Client/6.2.2": {
@@ -2475,7 +2535,10 @@
       "MassTransit.AspNetCore >= 7.3.1",
       "MassTransit.MongoDb >= 7.3.1",
       "MassTransit.RabbitMQ >= 7.3.1",
+      "Play.Catalog.Contracts >= 1.0.1",
       "Play.Common >= 1.0.5",
+      "Play.Identity.Contracts >= 1.0.0",
+      "Play.Inventory.Contracts >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
   },
@@ -2535,9 +2598,21 @@
             "target": "Package",
             "version": "[7.3.1, )"
           },
+          "Play.Catalog.Contracts": {
+            "target": "Package",
+            "version": "[1.0.1, )"
+          },
           "Play.Common": {
             "target": "Package",
             "version": "[1.0.5, )"
+          },
+          "Play.Identity.Contracts": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          },
+          "Play.Inventory.Contracts": {
+            "target": "Package",
+            "version": "[1.0.0, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using GreenPipes;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +19,11 @@ using Play.Common.Identity;
 using Play.Common.MassTransit;
 using Play.Common.MongoDB;
 using Play.Common.Settings;
+using Play.Identity.Contracts;
+using Play.Inventory.Contracts;
+using Play.Trading.Service.Entities;
+using Play.Trading.Service.Exceptions;
+using Play.Trading.Service.Settings;
 using Play.Trading.Service.StateMachines;
 
 namespace Play.Trading.Service
@@ -35,11 +43,24 @@ namespace Play.Trading.Service
 
             services
                 .AddMongo()
+                .AddMongoRepository<CatalogItem>("catalogitems")
                 .AddJwtBearerAuthentication();
 
             AddMassTransit(services);
 
-            services.AddControllers();
+            services
+                .AddControllers(options =>
+            {
+                /*
+                    because there's a bug in .net, and when we do thins like CreatedAtAction with async method, the async name from the methods gets removed
+                    and we don't want this to happen
+                 */
+                options.SuppressAsyncSuffixInActionNames = false;
+            })
+                // what this will do is whenever the output response contains null values, they will not be outputed
+                .AddJsonOptions(
+                        options => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Play.Trading.Service", Version = "v1" });
@@ -75,9 +96,21 @@ namespace Play.Trading.Service
             services
                 .AddMassTransit(configure =>
                 {
-                    configure.UsingPlayEconomyRabbitMq();
+                    configure.UsingPlayEconomyRabbitMq(retryConfigurator =>
+                    {
+                        retryConfigurator.Interval(3, TimeSpan.FromSeconds(5));
+                        retryConfigurator.Ignore(typeof(UnknownItemException));
+                    });
+                    configure.AddConsumers(Assembly.GetEntryAssembly());
                     configure
-                        .AddSagaStateMachine<PurchaseStateMachine, PurchaseState>()
+                        .AddSagaStateMachine<PurchaseStateMachine, PurchaseState>(sagaConfigurator =>
+                        {
+                            /*
+                                We are performing this configuration here because we just want to send messages to the other participants in the saga whenever we transition to the appropriate state.
+                                For example, we want to send message to grant items, only when we are in the accepted state.
+                             */
+                            sagaConfigurator.UseInMemoryOutbox();
+                        })
                         .MongoDbRepository(repository =>
                         {
                             var serviceSettings = Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
@@ -86,8 +119,20 @@ namespace Play.Trading.Service
                             repository.DatabaseName = serviceSettings.ServiceName;
                         });
                 });
+
+            var queueSettings = Configuration.GetSection(nameof(QueueSettings)).Get<QueueSettings>();
+            /*
+                What this is saying is that whenever we want to send a command/message of type GrantItems, we should send it to the queue defined below
+             */
+            EndpointConvention.Map<GrantItems>(new Uri(queueSettings.GrantItemsQueueAddress));
+            EndpointConvention.Map<DebitGil>(new Uri(queueSettings.DebitGilQueueAddress));
+
             services
                 .AddMassTransitHostedService();
+
+            //this is because we use the request client inside the controller
+            services
+                .AddGenericRequestClient();
         }
 
     }
