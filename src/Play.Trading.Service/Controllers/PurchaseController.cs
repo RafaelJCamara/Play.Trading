@@ -25,11 +25,11 @@ namespace Play.Trading.Service.Controllers
         }
 
 
-        [HttpGet("status/{correlationId}")]
-        public async Task<ActionResult<PurchaseDto>> GetStatusAsync(Guid correlationId)
+        [HttpGet("status/{idempotencyId}")]
+        public async Task<ActionResult<PurchaseDto>> GetStatusAsync(Guid idempotencyId)
         {
             var response = await purchaseClient
-                                    .GetResponse<PurchaseState>(new GetPurchaseState(correlationId));
+                                    .GetResponse<PurchaseState>(new GetPurchaseState(idempotencyId));
             var purchaseState = response.Message;
 
             var purchase = new PurchaseDto(
@@ -51,7 +51,13 @@ namespace Play.Trading.Service.Controllers
         public async Task<IActionResult> PostAsync(SubmitPurchaseDto purchase)
         {
             var userId = User.FindFirstValue("sub");
-            var correlationId = Guid.NewGuid();
+
+            /*
+                As we have seen before, the correlationId is what uniquely identitifes the state machine
+                By using it as the idempotencyId, we avoid troubling situations that come with not having idempotency
+                If you want to generate another purchase, you must must create another idempotency ID
+             */
+            var correlationId = purchase.IdempotencyId.Value;
 
             var message = new PurchaseRequested(
                 Guid.Parse(userId),
