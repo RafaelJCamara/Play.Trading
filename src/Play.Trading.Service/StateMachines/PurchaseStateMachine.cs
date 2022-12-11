@@ -4,12 +4,15 @@ using Play.Identity.Contracts;
 using Play.Inventory.Contracts;
 using Play.Trading.Service.Activities;
 using Play.Trading.Service.Contracts;
+using Play.Trading.Service.SignalR;
 using System;
 
 namespace Play.Trading.Service.StateMachines
 {
     public class PurchaseStateMachine : MassTransitStateMachine<PurchaseState>
     {
+        private readonly MessageHub hub;
+
         public State Accepted { get; }
         public State ItemsGranted { get; }
         public State Completed { get; }
@@ -27,7 +30,7 @@ namespace Play.Trading.Service.StateMachines
         public Event<Fault<DebitGil>> DebitGilFaulted { get; }
         
 
-        public PurchaseStateMachine()
+        public PurchaseStateMachine(MessageHub hub)
         {
             //this just means that the CurrentState variable will contain the state of the State Machine
             InstanceState(state => state.CurrentState);
@@ -39,6 +42,7 @@ namespace Play.Trading.Service.StateMachines
             ConfigureItemsGranted();
             ConfigureFaulted();
             ConfigureCompleted();
+            this.hub = hub;
         }
 
         //Configure all the events
@@ -93,6 +97,10 @@ namespace Play.Trading.Service.StateMachines
                         context.Instance.LastUpdated = DateTimeOffset.UtcNow;
                     }    
                 ).TransitionTo(Faulted))
+                /*
+                    Whenever we transition to a final state, either with success or failure (as with this scenario), we need to send this information to our frontend application
+                 */
+                .ThenAsync(async context => await hub.SendStatusAsync(context.Instance))
             );
         }
 
@@ -122,6 +130,7 @@ namespace Play.Trading.Service.StateMachines
                         context.Instance.LastUpdated = DateTimeOffset.UtcNow;
                     })
                     .TransitionTo(Faulted)
+                    .ThenAsync(async context => await hub.SendStatusAsync(context.Instance))
             );
         }
 
@@ -134,7 +143,8 @@ namespace Play.Trading.Service.StateMachines
                     {
                         context.Instance.LastUpdated = DateTimeOffset.UtcNow;
                     })
-                    .TransitionTo(Completed),
+                    .TransitionTo(Completed)
+                    .ThenAsync(async context => await hub.SendStatusAsync(context.Instance)),
                 When(DebitGilFaulted)
                     .Send(context => new SubtracItems(
                             context.Instance.UserId,
@@ -148,6 +158,7 @@ namespace Play.Trading.Service.StateMachines
                         context.Instance.LastUpdated = DateTimeOffset.UtcNow;
                     })
                     .TransitionTo(Faulted)
+                    .ThenAsync(async context => await hub.SendStatusAsync(context.Instance))
             );
         }
 
