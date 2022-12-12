@@ -22,8 +22,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Users\\Rafael\\Documents\\Projects\\DotnetMicroservices\\packages": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/RafaelJCamara/index.json": {}
         },
         "frameworks": {
           "net6.0": {
@@ -59,7 +59,7 @@
             },
             "Play.Catalog.Contracts": {
               "target": "Package",
-              "version": "[1.0.1, )"
+              "version": "[1.0.3, )"
             },
             "Play.Common": {
               "target": "Package",
@@ -67,11 +67,11 @@
             },
             "Play.Identity.Contracts": {
               "target": "Package",
-              "version": "[1.0.1, )"
+              "version": "[1.0.3, )"
             },
             "Play.Inventory.Contracts": {
               "target": "Package",
-              "version": "[1.0.1, )"
+              "version": "[1.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
