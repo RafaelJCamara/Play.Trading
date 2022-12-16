@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Rafael\\Documents\\Projects\\DotnetMicroservices\\Play.Trading\\src\\Play.Trading.Service\\Play.Trading.Service.csproj": {}
+    "/Users/rafaelcamara/Documents/Projects/DotnetMicroservices/Play.Trading/src/Play.Trading.Service/Play.Trading.Service.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Rafael\\Documents\\Projects\\DotnetMicroservices\\Play.Trading\\src\\Play.Trading.Service\\Play.Trading.Service.csproj": {
+    "/Users/rafaelcamara/Documents/Projects/DotnetMicroservices/Play.Trading/src/Play.Trading.Service/Play.Trading.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Rafael\\Documents\\Projects\\DotnetMicroservices\\Play.Trading\\src\\Play.Trading.Service\\Play.Trading.Service.csproj",
+        "projectUniqueName": "/Users/rafaelcamara/Documents/Projects/DotnetMicroservices/Play.Trading/src/Play.Trading.Service/Play.Trading.Service.csproj",
         "projectName": "Play.Trading.Service",
-        "projectPath": "C:\\Users\\Rafael\\Documents\\Projects\\DotnetMicroservices\\Play.Trading\\src\\Play.Trading.Service\\Play.Trading.Service.csproj",
-        "packagesPath": "C:\\Users\\Rafael\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Rafael\\Documents\\Projects\\DotnetMicroservices\\Play.Trading\\src\\Play.Trading.Service\\obj\\",
+        "projectPath": "/Users/rafaelcamara/Documents/Projects/DotnetMicroservices/Play.Trading/src/Play.Trading.Service/Play.Trading.Service.csproj",
+        "packagesPath": "/Users/rafaelcamara/.nuget/packages/",
+        "outputPath": "/Users/rafaelcamara/Documents/Projects/DotnetMicroservices/Play.Trading/src/Play.Trading.Service/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Rafael\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/rafaelcamara/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {},
           "https://nuget.pkg.github.com/RafaelJCamara/index.json": {}
         },
@@ -63,7 +61,7 @@
             },
             "Play.Common": {
               "target": "Package",
-              "version": "[1.0.6, )"
+              "version": "[1.0.8, )"
             },
             "Play.Identity.Contracts": {
               "target": "Package",
@@ -96,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.302/RuntimeIdentifierGraph.json"
         }
       }
     }
