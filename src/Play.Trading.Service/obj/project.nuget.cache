@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "6f5M0z6cbZE4T8YbCmetjf+jcm5tP+lXBlCA0H2qGaE+JhebgY77FtUGDE0k40YPQotKkh/nzkfCAhqUZxDwYg==",
+  "dgSpecHash": "aw7jozxyt3+6nLhV3y8uyt/CbohnIjq+METY+skbAu2cjyouTpQvg3LhUIvoAFc2l2WT4pBXU1pFktVAmuAmng==",
   "success": true,
   "projectFilePath": "/Users/rafaelcamara/Documents/Projects/DotnetMicroservices/Play.Trading/src/Play.Trading.Service/Play.Trading.Service.csproj",
   "expectedPackageFiles": [
@@ -52,7 +52,7 @@
     "/Users/rafaelcamara/.nuget/packages/newtonsoft.json/12.0.1/newtonsoft.json.12.0.1.nupkg.sha512",
     "/Users/rafaelcamara/.nuget/packages/newtonsoft.json.bson/1.0.2/newtonsoft.json.bson.1.0.2.nupkg.sha512",
     "/Users/rafaelcamara/.nuget/packages/play.catalog.contracts/1.0.3/play.catalog.contracts.1.0.3.nupkg.sha512",
-    "/Users/rafaelcamara/.nuget/packages/play.common/1.0.8/play.common.1.0.8.nupkg.sha512",
+    "/Users/rafaelcamara/.nuget/packages/play.common/1.0.9/play.common.1.0.9.nupkg.sha512",
     "/Users/rafaelcamara/.nuget/packages/play.identity.contracts/1.0.3/play.identity.contracts.1.0.3.nupkg.sha512",
     "/Users/rafaelcamara/.nuget/packages/play.inventory.contracts/1.0.3/play.inventory.contracts.1.0.3.nupkg.sha512",
     "/Users/rafaelcamara/.nuget/packages/rabbitmq.client/6.2.2/rabbitmq.client.6.2.2.nupkg.sha512",
