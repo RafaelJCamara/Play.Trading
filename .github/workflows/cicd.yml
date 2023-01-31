@@ -40,4 +40,4 @@ jobs:
         secrets: |
           "GH_OWNER=${{github.repository_owner}}"
           "GH_PAT=${{secrets.PUSH_NUGET}}"
-        tags: ${{env.APP_NAME}}.azurecr.io/play.trading:${{ needs.generate-version.outputs.new_version }
+        tags: ${{env.APP_NAME}}.azurecr.io/play.trading:${{ needs.generate-version.outputs.new_version }}
