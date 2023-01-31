@@ -1,4 +1,4 @@
-# Play.Catalog
+# Play.Trading
 Trading microservice.
 
 ## Build the docker image
